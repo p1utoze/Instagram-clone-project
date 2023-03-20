@@ -16,15 +16,23 @@ print(connect_params.values())
 
 conn = mariadb.connect(**connect_params)
 
-cur = conn.cursor()
+db = conn.cursor()
 query = '''select p.location, count(*) as total_posts
 from post p
 # where location in ('karnataka')
 group by p.location
 having total_posts >=4
 order by total_posts desc;'''
+try:
 
-cur.execute(query)
-results = cur.fetchall()
-for i in results:
-    print(*i)
+    db.execute(query)
+    results = db.fetchall()
+    for i in results:
+        print(*i)
+   # Commit your changes in the database
+    db.commit()
+except:
+   # Rollback in case there is any error
+    db.rollback()
+
+db.close()
