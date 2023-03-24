@@ -9,17 +9,40 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="../static/style.css" />
     <link
       rel="stylesheet"
       href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
     />
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyBFyRpkv03bInA2u-LNaTm48KTk9D5nXos",
+        authDomain: "social-media-app-69.firebaseapp.com",
+        projectId: "social-media-app-69",
+        storageBucket: "social-media-app-69.appspot.com",
+        messagingSenderId: "901516529814",
+        appId: "1:901516529814:web:23f13b3c658c7530d272b7",
+        measurementId: "G-9GQ1LTT0CG"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
   </head>
   <body>
     <!-- navigation -->
     <nav class="navbar">
       <div class="nav-wrapper">
-        <img class="brand-img" src="assets/images/logo.png" />
+        <img class="brand-img" src="../images/logo.png" />
         <form class="search-form">
           <input type="text" class="search-box" placeholder="search.." />
         </form>
@@ -43,45 +66,45 @@
           <div class="status-wrapper">
             <div class="status-card">
               <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
+                <img src="../images/profile.jpg" alt="" />
               </div>
               <p class="username">username</p>
             </div>
             <div class="status-card">
               <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
+                <img src="../images/profile.jpg" alt="" />
               </div>
               <p class="username">username</p>
             </div>
             <div class="status-card">
               <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
+                <img src="../images/profile.jpg" alt="" />
               </div>
               <p class="username">username</p>
             </div>
             <div class="status-card">
               <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
+                <img src="../images/profile.jpg" alt="" />
               </div>
               <p class="username">username</p>
             </div>
             <div class="status-card">
               <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
-              </div>
-              <p class="username">username</p>
-            </div>
-
-            <div class="status-card">
-              <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
+                <img src="../images/profile.jpg" alt="" />
               </div>
               <p class="username">username</p>
             </div>
 
             <div class="status-card">
               <div class="profile-pic">
-                <img src="assets/images/profile.jpg" alt="" />
+                <img src="../images/profile.jpg" alt="" />
+              </div>
+              <p class="username">username</p>
+            </div>
+
+            <div class="status-card">
+              <div class="profile-pic">
+                <img src="../images/profile.jpg" alt="" />
               </div>
               <p class="username">username</p>
             </div>
@@ -93,13 +116,13 @@
             <div class="info">
               <div class="user">
                 <div class="profile-pic">
-                  <img src="assets/images/profile.jpg" alt="" />
+                  <img src="../images/profile.jpg" alt="" />
                 </div>
                 <p class="username">username</p>
               </div>
               <i class="fas fa-ellipsis-h options"></i>
             </div>
-            <img src="assets/images/1.jpg" class="post-image" />
+            <img src="../images/1.jpg" class="post-image" />
             <div class="post-content">
               <div class="reaction-wrapper">
                 <i class="icon fas fa-heart"></i>
@@ -113,7 +136,7 @@
             </div>
 
             <div class="comment-wrapper">
-              <img src="assets/images/profile.jpg" class="icon" />
+              <img src="../images/profile.jpg" class="icon" />
               <input
                 type="text"
                 class="comment-box"
@@ -128,7 +151,7 @@
 
           <div class="profile-card">
             <div class="profile-pic">
-              <img src="assets/images/profile.jpg" alt="" />
+              <img src="../images/profile.jpg" alt="" />
             </div>
             <div>
               <p class="username">username</p>
@@ -143,7 +166,7 @@
 
           <div class="suggestion-card">
             <div class="suggestion-pic">
-              <img src="assets/images/2.jpg" alt="" />
+              <img src="../images/2.jpg" alt="" />
             </div>
             <div>
               <p class="username">username</p>

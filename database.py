@@ -24,12 +24,18 @@ def __get_connect():
      'port': 3306,
      'host': os.getenv('DATABASE_HOST')
      }
+    skysql_params = {'host': "dbpgf03059429.sysp0000.db.skysql.net",
+                     'user': "dbpgf03059429",
+                     'password': os.getenv('SKYSQL_PASSWORD'),
+                     'port': 3306,
+                     'ssl_ca': 'secrets/skysql_chain_2022.pem',
+                     'database': 'social_media'}
     conn = mariadb.connect(**connect_params)
     return conn
 
 
 # conn = __get_connect()
-# print(connect_params.values())
+# print(conn.user)
 
 
 # db = conn.cursor()
