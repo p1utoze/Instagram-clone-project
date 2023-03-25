@@ -192,38 +192,41 @@
 
         verifyForm();
       });
-      function getLogin_redirect() {
+      async function getLogin_redirect() {
         const loginForm = document.getElementById("login-form")
 
         // Add an event listener to the form submit event
-        loginForm.addEventListener('submit', (event) => {
-          event.preventDefault(); // Prevent the form from submitting normally
+        loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent the form from submitting normally
 
-          // Get the username and password values
-          const email = document.getElementById('login_mail').value;
-          const password = document.getElementById('password').value;
+      // Get the username and password values
+      const email = document.getElementById('login_mail').value;
+      const password = document.getElementById('password').value;
+    
+      // Make the GET request to the API endpoint
+      try {
+        const response = await fetch('http://127.0.0.1:8000/users?email=${email}', {
+            method:'GET',
+        }, {'mode': 'no-cors'})
+        console.log(response.json())
+        const data = response.json()
 
-          // Make the GET request to the API endpoint
-          try {
-          fetch('http://127.0.0.1:8000/users?email=${email}')
-            .then(response => response.json())
-            .then(data => {
-              if (data.key === true) {
-                // Redirect to home.html if key is true
-                window.location.href = 'index.html';
-              } else {
-                // Display an error message if key is false
-                const errorMsg = document.getElementById('error-msg');
-                errorMsg.textContent = 'Incorrect email or password';
-                errorMsg.style.display = 'block';
-              }
-            })
+        if (data.key === true) {
+            // Redirect to home.html if key is true
+            window.location.href = 'index.html';
+          } else {
+            // Display an error message if key is false
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.textContent = 'Incorrect email or password';
+            errorMsg.style.display = 'block';
           }
-          catch { (error => console.error(error)) } ;
-        });
+
+      } catch (error) {
+        console.log(error)
+      }
+      });
       }
     </script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
   </body>
 </html>
