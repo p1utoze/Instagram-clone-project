@@ -40,13 +40,14 @@
               <div class="logo">
                 <img src="../images/logo.png" alt="" class="logo-img" />
               </div>
-              <form action="" class="login-form" id="login-form" >
+              <form class="login-form" id="login-form" >
                 <p class="text-center alert-danger" id="error_message"></p>
                 <div class="form-group">
                   <div class="login-input">
                     <input
                       type="text"
                       name="email"
+                      id="login_mail"
                       placeholder="Type your email..."
                       required
                     />
@@ -63,8 +64,9 @@
                     />
                   </div>
                 </div>
+                <div id="error-msg" style="display:none;color:red;"></div>
                 <div class="btn-group">
-                  <button class="login-btn" id="login_btn" type="submit">
+                  <button class="login-btn" id="login_btn" type="submit" onclick="getLogin_redirect()">
                     Log In
                   </button>
                 </div>
@@ -190,6 +192,36 @@
 
         verifyForm();
       });
+      function getLogin_redirect() {
+        const loginForm = document.getElementById("login-form")
+
+        // Add an event listener to the form submit event
+        loginForm.addEventListener('submit', (event) => {
+          event.preventDefault(); // Prevent the form from submitting normally
+
+          // Get the username and password values
+          const email = document.getElementById('login_mail').value;
+          const password = document.getElementById('password').value;
+
+          // Make the GET request to the API endpoint
+          try {
+          fetch('http://127.0.0.1:8000/users?email=${email}')
+            .then(response => response.json())
+            .then(data => {
+              if (data.key === true) {
+                // Redirect to home.html if key is true
+                window.location.href = 'index.html';
+              } else {
+                // Display an error message if key is false
+                const errorMsg = document.getElementById('error-msg');
+                errorMsg.textContent = 'Incorrect email or password';
+                errorMsg.style.display = 'block';
+              }
+            })
+          }
+          catch { (error => console.error(error)) } ;
+        });
+      }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
