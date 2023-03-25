@@ -3,13 +3,16 @@ import fastapi as fa
 from database import __get_connect
 
 app = fa.FastAPI(title='Social_media_API')
-conn = __get_connect()
-db = conn.cursor()
+async def get_connected():
+    conn =  __get_connect()
+    db = conn.cursor()
+    return db
+
 
 
 @app.get("/posts/{post_id}")
 async def get_postid(post_id: int, q: Union[str, None]=None):
-
+    db = await get_connected()
     query = f'''select photo_id, video_id, user_id, caption, location from post where post_id={post_id}'''
     db.execute(query)
     res = db.fetchone()
@@ -18,6 +21,7 @@ async def get_postid(post_id: int, q: Union[str, None]=None):
 
 @app.get("/users")
 async def valid_user(user_id: int = -1, email: str = "XYZ"):
+    db = await get_connected()
     if user_id and user_id != -1:
         db.execute(f'''SELECT user_id, username,
                     IF(EXISTS(SELECT 1 FROM users WHERE user_id = 12), 'true', 'false') as user_exists
