@@ -14,6 +14,10 @@ import mariadb
 # engine = create_engine(url_obj)
 # Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # db = Session.begin()
+async def get_connected():
+    conn = __get_connect()
+    db = conn.cursor()
+    return db
 
 
 def __get_connect():
