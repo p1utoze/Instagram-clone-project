@@ -10,17 +10,17 @@ async function getLogin_redirect() {
   const password = document.getElementById('password').value;
 
   // Make the GET request to the API endpoint
-  if (verifyForm == true) {
+  if (verifyForm() == true) {
   try {
     const response = await fetch(`http://127.0.0.1:8000/users?email=${email}`, {
         method:'GET',
     })
     // console.log(response.json())
     const data = await response.json()
-    console.log(data)
     if (data.user == true) {
         // Redirect to home.html if key is true
         window.location.href = 'index.html';
+        follower_stories(data.user_id);
       } 
       else {
         // Display an error message if key is false
@@ -87,7 +87,8 @@ function verifyForm() {
   var password = document.getElementById("password").value;
   var error_message = document.getElementById("error_message");
 
-  if (password.length < 6) {
+  if (password.length < 8) {
+    document.getElementById("password").value = ""; 
     error_message.innerHTML = "Password is to short";
     return false;
   }
@@ -106,7 +107,7 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
   verifyForm();
 });
 
-async function follower_stories(user_id) {
+function follower_stories(user_id) {
   const imageContainer = document.getElementById('status-wrapper');
 
   fetch(`https://api.example.com/followers/${user_id}`)
@@ -117,7 +118,7 @@ async function follower_stories(user_id) {
     
     // Loop through the img elements and set their src value based on the corresponding item in the response data list
     imgElements.forEach((imgElement, index) => {
-      imgElement.src = data[index].imageUrl;
+      imgElement.src = data.profile_photo_url[index];
     });
   })
   .catch(error => console.log(error));
