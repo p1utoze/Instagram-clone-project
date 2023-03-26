@@ -55,15 +55,14 @@ async def valid_user(user_id: int = -1, email: str = "XYZ"):
 async def followers_transact(user_id: int):
     db = await get_connected()
     try:
-        db.execute(f'''select user_id, email, username, bio, profile_photo_url
-        # from users
-        # where user_id in (select follower_id from follows where followee_id  = {user_id});''')
+        db.execute(f'''select user_id, email, username, bio, profile_photo_url from users 
+        where user_id in (select follower_id from follows where followee_id={user_id});''')
         resp = db.fetchall()
         keys = ("user_id", "email", "username", "bio", "profile_photo_url")
         response = {}
-        samples = sample(range(1, resp.__len__()+1), k=10)
-        for k, *v in zip(keys, zip(*[resp[i]for i in samples])):
-            response[k] = v
+        samples = sample(range(1, resp.__len__()), k=10)
+        for k, *v in zip(keys, zip(*[resp[i] for i in samples])):
+            response[k] = v[0]
         return response
     except:
         return 'Internal server error'
