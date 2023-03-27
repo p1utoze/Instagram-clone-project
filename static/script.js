@@ -17,10 +17,42 @@ async function getLogin_redirect() {
     })
     // console.log(response.json())
     const data = await response.json()
+    console.log(data.user);
+
     if (data.user == true) {
         // Redirect to home.html if key is true
-        window.location.href = 'index.html';
-        follower_stories(data.user_id);
+        // await follower_stories(data.user_id); 
+        // console.log(data);
+        localStorage['user_id'] = data.user_id;
+        userid = localStorage['user_id'];
+        console.log(userid);
+        window.location.replace('http://127.0.0.1:5500/static/index.html');
+        
+        // console.log(userid);
+        try {
+          const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
+              method:'GET',
+          })
+        // console.log(response.json())
+        console.log(response);
+        const followers = await response.json()
+       
+        window.addEventListener('load', () => {
+          // select all img elements in .status-wrapper container
+          const imgElements = document.querySelectorAll('.profile-pic img');
+          console.log(imgElements);
+          // loop through img elements and set src attribute to corresponding image URL from response data
+          imgElements.forEach((img, index) => {
+            img.src = followers.profile_photo_url[index];
+          });
+        });
+        // console.log(data);
+          // Get the list of img elements from the division container
+          // Loop through the img elements and set their src value based on the corresponding item in the response data list
+      }
+        catch (error) {
+          console.log(error) 
+        } 
       } 
       else {
         // Display an error message if key is false
@@ -32,6 +64,10 @@ async function getLogin_redirect() {
   }
   }});
 }
+
+
+
+
 function changeImage() {
   var images = document
     .getElementById("slide-content")
@@ -60,6 +96,10 @@ function changeImage() {
   }
 }
 
+
+
+
+
 function changeMode() {
   var body = document.getElementsByTagName("body")[0];
   var footerLinks = document
@@ -83,12 +123,14 @@ function changeMode() {
   }
 }
 
+
+
+
 function verifyForm() {
   var password = document.getElementById("password").value;
   var error_message = document.getElementById("error_message");
 
-  if (password.length < 8) {
-    document.getElementById("password").value = ""; 
+  if (password.length < 6) {
     error_message.innerHTML = "Password is to short";
     return false;
   }
@@ -96,30 +138,12 @@ function verifyForm() {
   return true;
 }
 
-document.getElementById("dark-btn").addEventListener("click", (e) => {
-  e.preventDefault();
-  changeMode();
-});
+// document.getElementById("dark-btn").addEventListener("click", (e) => {
+//   e.preventDefault();
+//   changeMode();
+// });
 
-document.getElementById("login-form").addEventListener("submit", (e) => {
-  e.preventDefault();
+// document.getElementById("login-form").addEventListener("submit", (e) => {
+//   e.preventDefault();
 
-  verifyForm();
-});
-
-function follower_stories(user_id) {
-  const imageContainer = document.getElementById('status-wrapper');
-
-  fetch(`https://api.example.com/followers/${user_id}`)
-  .then(response => response.json())
-  .then(data => {
-    // Get the list of img elements from the division container
-    const imgElements = imageContainer.querySelectorAll('img');
-    
-    // Loop through the img elements and set their src value based on the corresponding item in the response data list
-    imgElements.forEach((imgElement, index) => {
-      imgElement.src = data.profile_photo_url[index];
-    });
-  })
-  .catch(error => console.log(error));
-}
+//   verifyForm();
