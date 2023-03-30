@@ -165,10 +165,12 @@ async function suggestions() {
             method:'GET',
         });
         const suggestion = await response.json()
-        console.log(suggestion);
+        console.log(`SUGGG: ${suggestion.profile_photo_url}`);
         const sugg_text = document.querySelectorAll('.suggestion-card p');
+        const sugg_pic = document.querySelector('.suggestion-pic img');
         sugg_text[0].textContent = suggestion.username;
         sugg_text[1].textContent = suggestion.bio;
+        sugg_pic.src = suggestion.profile_photo_url;
   }
   catch (error) {
     console.log(error) 

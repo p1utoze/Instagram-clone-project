@@ -69,10 +69,10 @@ async def followers_transact(user_id: int, self: int = 0, suggestion: bool = Fal
             return "Internal server Error"
     elif suggestion:
         try:
-            db.execute(f'''select user_id, username, bio from users where user_id not in (select distinct follower_id from follows where followee_id={user_id})''')
+            db.execute(f'''select user_id, username, bio, profile_photo_url from users where user_id not in (select distinct follower_id from follows where followee_id={user_id})''')
             suggest = db.fetchall()
             samples = sample(suggest, k=1)[0]
-            return dict(zip(("user_id", "username", "bio"), samples))
+            return dict(zip(("user_id", "username", "bio", "profile_photo_url"), samples))
         except:
             return "Internal server Error"
     try:
