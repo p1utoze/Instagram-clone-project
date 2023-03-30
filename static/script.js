@@ -12,18 +12,18 @@ const password = document.getElementById('password').value;
 // Make the GET request to the API endpoint
 if (verifyForm() == true) {
 try {
-  const response = await fetch(`http://127.0.0.1:8000/user?=${name}`, {
+  const response = await fetch(`http://127.0.0.1:8000/users?name=${name}&user_bool=1`, {
       method:'GET', 
   })
   // console.log(response.json())
   const data = await response.json()
-  console.log(data);
+  console.log(data.exists);
 
-  if (data.user == true) {
+  if (data.exists) {
       // Redirect to home.html if key is true
       // await follower_stories(data.user_id); 
       // console.log(data);
-      const encoded_data = encodeURIComponent(data);
+      const encoded_data = encodeURIComponent(data.user_id);
       window.location.replace(`http://127.0.0.1:5500/static/index.html?user=${encoded_data}`);
       
       // console.log(userid); 
