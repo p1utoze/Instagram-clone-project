@@ -17,7 +17,7 @@ try {
   })
   // console.log(response.json())
   const data = await response.json()
-  console.log(data.exists);
+  // console.log(data.exists);
 
   if (data.exists) {
       // Redirect to home.html if key is true
@@ -108,29 +108,12 @@ if (password.length < 6) {
 return true;
 }
 
-document.getElementById("dark-btn").addEventListener("click", (e) => {
-e.preventDefault();
-changeMode();
-});
 
-document.getElementById("login-form").addEventListener("submit", (e) => {
-e.preventDefault();
-
-verifyForm();
-});
-
-async function load_stories() {
+async function load_home() {
   const urlParams = new URLSearchParams(window.location.search);
   const encodeduser = urlParams.get('user');
   const userid = decodeURIComponent(encodeduser);
-  console.log(userid);
-  try {
-    
-  
-  }
-catch (error) {
-  console.log(error) 
-}
+  // console.log(userid);
   try {
         const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
             method:'GET',
@@ -140,25 +123,52 @@ catch (error) {
         });
         const user = await user_data.json()
         console.log(user);
+        const usertext = document.querySelector('#user-card .username');
+        usertext.textContent = user.username;
+        const userbio = document.querySelector('#user-card .sub-text');
+        userbio.textContent = user.bio;
       // console.log(response.json())
       const followers = await response.json()
-        console.log(followers);
-      window.addEventListener('load', () => {
-        // select all img elements in .status-wrapper container
-        const profileElement = document.querySelector('.profile-card img');
-        profileElement.src = user.profile_photo_url;
+        // console.log(followers.profile_photo_url.length);
+        const profileElements = document.querySelectorAll('#user-card img, .user .profile-pic img, .comment-wrapper img');
+        for (let i=0; i<profileElements.length; i++){
+          console.log(user.profile_photo_url);
+          profileElements[i].src = user.profile_photo_url;
+        }
         const imgElements = document.querySelectorAll('.status-card img');
         console.log(imgElements);
         // loop through img elements and set src attribute to corresponding image URL from response data
-        imgElements.forEach((img, index) => {
-          img.src = followers.profile_photo_url[index];
-        });
-      });
-      // console.log(data);
-        // Get the list of img elements from the division container
-        // Loop through the img elements and set their src value based on the corresponding item in the response data list
+        for (let i=0; i<imgElements.length; i++){
+          imgElements[i].src = followers.profile_photo_url[i];
+        }
+        const textElements = document.querySelectorAll('.status-card .username');
+        for (let i=0; i<textElements.length; i++){
+          textElements[i].textContent = followers.username[i];
+        }
+      // window.addEventListener('load', () => {
+        // profileElement.src = user.profile_photo_url;
     }
       catch (error) {
         console.log(error) 
       }
+}
+
+async function suggestions() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const encodeduser = urlParams.get('user');
+  const userid = decodeURIComponent(encodeduser);
+  // console.log(userid);
+  try {
+        const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
+            method:'GET',
+        });
+        const user_data = await fetch(`http://127.0.0.1:8000/followers/${userid}?self=1`, {
+            method:'GET',
+        });
+        const user = await user_data.json()
+}
+
+function logout()
+{
+  window.location.replace('http://127.0.0.1:5500/static/login.html');
 }
