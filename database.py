@@ -36,12 +36,12 @@ def __get_connect():
                      'port': 3306,
                      'ssl_ca': 'secrets/skysql_chain_2023.pem',
                      }
-    conn = mariadb.connect(**skysql_params)
+    conn = mariadb.connect(**connect_params)
     return conn
 
-
-conn = __get_connect()
-print(conn.user)
+#
+# conn = __get_connect()
+# print(conn.user)
 
 
 # db = conn.cursor()

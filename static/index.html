@@ -197,6 +197,39 @@
     </section>
 
     <!-- script -->
+    <script>
+      async function load_stories() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodeduser = urlParams.get('userid');
+        const decodeduser = decodeURIComponent(encodeduser);
+        console.log(decodeduser);
+        try {
+              const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
+                  method:'GET',
+              })
+            // console.log(response.json())
+            console.log(response);
+            const followers = await response.json()
+          
+            window.addEventListener('load', () => {
+              // select all img elements in .status-wrapper container
+              const imgElements = document.querySelectorAll('.profile-pic img');
+              console.log(imgElements);
+              // loop through img elements and set src attribute to corresponding image URL from response data
+              imgElements.forEach((img, index) => {
+                img.src = followers.profile_photo_url[index];
+              });
+            });
+            // console.log(data);
+              // Get the list of img elements from the division container
+              // Loop through the img elements and set their src value based on the corresponding item in the response data list
+          }
+            catch (error) {
+              console.log(error) 
+            }
+      }
+      load_stories()
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
   </body>
 </html>

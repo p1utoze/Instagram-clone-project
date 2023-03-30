@@ -142,36 +142,10 @@
             // Redirect to home.html if key is true
             // await follower_stories(data.user_id); 
             // console.log(data);
-            localStorage['user_id'] = data.user_id;
-            userid = localStorage['user_id'];
-            console.log(userid);
-            window.location.replace('http://127.0.0.1:5500/static/index.html');
+            const encoded_data = encodeURIComponent(data.user_id);
+            window.location.href = `http://127.0.0.1:5500/static/index.html?userid=${encoded_data}`;
             
-            // console.log(userid);
-            try {
-              const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
-                  method:'GET',
-              })
-            // console.log(response.json())
-            console.log(response);
-            const followers = await response.json()
-          
-            window.addEventListener('load', () => {
-              // select all img elements in .status-wrapper container
-              const imgElements = document.querySelectorAll('.profile-pic img');
-              console.log(imgElements);
-              // loop through img elements and set src attribute to corresponding image URL from response data
-              imgElements.forEach((img, index) => {
-                img.src = followers.profile_photo_url[index];
-              });
-            });
-            // console.log(data);
-              // Get the list of img elements from the division container
-              // Loop through the img elements and set their src value based on the corresponding item in the response data list
-          }
-            catch (error) {
-              console.log(error) 
-            } 
+            // console.log(userid); 
           } 
           else {
             // Display an error message if key is false
@@ -214,10 +188,6 @@
         }
       }
     }
-
-
-
-
 
     function changeMode() {
       var body = document.getElementsByTagName("body")[0];
