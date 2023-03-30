@@ -13,7 +13,7 @@ const password = document.getElementById('password').value;
 if (verifyForm() == true) {
 try {
   const response = await fetch(`http://127.0.0.1:8000/users?email=${email}`, {
-      method:'GET',
+      method:'GET', 
   })
   // console.log(response.json())
   const data = await response.json()
@@ -23,8 +23,8 @@ try {
       // Redirect to home.html if key is true
       // await follower_stories(data.user_id); 
       // console.log(data);
-      const encoded_data = encodeURIComponent(data.user_id);
-      window.location.href = `http://127.0.0.1:5500/static/index.html?userid=${encoded_data}`;
+      const encoded_data = encodeURIComponent(data);
+      window.location.replace(`http://127.0.0.1:5500/static/index.html?user=${encoded_data}`);
       
       // console.log(userid); 
     } 
