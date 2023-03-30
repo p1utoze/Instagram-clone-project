@@ -1,7 +1,7 @@
 from typing import Union
 import fastapi as fa
 from database import get_connected
-from random import sample
+from random import sample, randint
 from fastapi.middleware.cors import CORSMiddleware
 app = fa.FastAPI(title='Social_media_API')
 app.add_middleware(
@@ -25,21 +25,21 @@ async def get_postid(post_id: int, q: Union[str, None]=None):
 
 
 @app.get("/users")
-async def valid_user(user_id: int = -1, email: str = "XYZ"):
+async def valid_user(user_bool: int = 0, name: str = "XYZ"):
     db = await get_connected()
     # return {'email': email}
-    if user_id and user_id != -1:
+    if user_bool and name:
         db.execute(f'''SELECT user_id, username,
-                    IF(EXISTS(SELECT 1 FROM users WHERE user_id = 12), 'true', 'false') as user_exists
+                    IF(EXISTS(SELECT 1 FROM users WHERE username='{name.lower()}'), 'true', 'false') as user_exists
                     FROM users
-                    WHERE user_id = 12;''')
+                    WHERE username='{name.lower()}';''')
         user_exits = db.fetchone()
         db.close()
-        return {'user_exists': bool(user_exits)}
-    elif isinstance(email, str):
+        return dict(zip(("user_id", "username", "exists" ), user_exits))
+    elif isinstance(name, str):
         try:
             db.execute(f'''select DISTINCT user_id, email, username, bio, profile_photo_url 
-                            from  users where email='{email}' group by email;''')
+                            from  users where username='{name.lower()}' group by email;''')
             user_profile = db.fetchone()
             res = dict(zip(("user_id", "email", "username", "bio", "profile_photo_url" ), user_profile))
             res['user'] = True
@@ -52,13 +52,30 @@ async def valid_user(user_id: int = -1, email: str = "XYZ"):
     return "Invalid query!"
 
 @app.get("/followers/{user_id}")
-async def followers_transact(user_id: int):
+async def followers_transact(user_id: int, self: int = 0, suggestion: bool = False ):
     db = await get_connected()
+    keys = ("user_id", "email", "username", "bio", "profile_photo_url")
+    if self:
+        try:
+            db.execute(f'''select  user_id, email, username, bio, profile_photo_url from users where user_id={user_id}''')
+            user_data = db.fetchone()
+            return dict(zip(keys, user_data))
+        except:
+            return "Internal server Error"
+    elif suggestion:
+        try:
+            db.execute(f'''select user_id, username, bio from users where user_id not in (select distinct follower_id from follows where followee_id={user_id})''')
+            suggest = db.fetchall()
+            samples = sample(suggest, k=1)[0]
+            return dict(zip(("user_id", "username", "bio"), samples))
+        except:
+            return "Internal server Error"
     try:
+        db.execute(f'''select  email, username, bio, profile_photo_url from users where user_id={user_id}''')
+        user_data = db.fetchone()
         db.execute(f'''select user_id, email, username, bio, profile_photo_url from users 
-        where user_id in (select follower_id from follows where followee_id={user_id});''')
+        where user_id in (select follower_id from follows where followee_id={user_id}) and profile_photo_url like 'http%';''')
         resp = db.fetchall()
-        keys = ("user_id", "email", "username", "bio", "profile_photo_url")
         response = {}
         samples = sample(range(1, resp.__len__()), k=10)
         for k, *v in zip(keys, zip(*[resp[i] for i in samples])):

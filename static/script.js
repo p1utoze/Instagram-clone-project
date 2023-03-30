@@ -127,6 +127,7 @@ async function load_home() {
         usertext.textContent = user.username;
         const userbio = document.querySelector('#user-card .sub-text');
         userbio.textContent = user.bio;
+        await suggestions();
       // console.log(response.json())
       const followers = await response.json()
         // console.log(followers.profile_photo_url.length);
@@ -159,13 +160,16 @@ async function suggestions() {
   const userid = decodeURIComponent(encodeduser);
   // console.log(userid);
   try {
-        const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
+        const response = await fetch(`http://127.0.0.1:8000/followers/${userid}?suggestion=true`, {
             method:'GET',
         });
-        const user_data = await fetch(`http://127.0.0.1:8000/followers/${userid}?self=1`, {
-            method:'GET',
-        });
-        const user = await user_data.json()
+        const suggestion = await response.json()
+        console.log("Suggestions")
+        console.log(suggestion);
+  }
+  catch (error) {
+    console.log(error) 
+  }
 }
 
 function logout()
