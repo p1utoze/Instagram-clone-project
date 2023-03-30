@@ -23,7 +23,7 @@ try {
       // Redirect to home.html if key is true
       // await follower_stories(data.user_id); 
       // console.log(data);
-      const encoded_data = encodeURIComponent(data.user_id);
+      const encoded_data = encodeURIComponent(data);
       window.location.replace(`http://127.0.0.1:5500/static/index.html?user=${encoded_data}`);
       
       // console.log(userid); 
@@ -121,11 +121,11 @@ verifyForm();
 
 async function load_stories() {
   const urlParams = new URLSearchParams(window.location.search);
-  const encodeduser = urlParams.get('userid');
+  const encodeduser = urlParams.get('user');
   const userid = decodeURIComponent(encodeduser);
   console.log(userid);
   try {
-        const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
+        const response = await fetch(`http://127.0.0.1:8000/followers/${userdata.user_id}`, {
             method:'GET',
         })
       // console.log(response.json())
@@ -133,7 +133,8 @@ async function load_stories() {
         console.log(followers);
       window.addEventListener('load', () => {
         // select all img elements in .status-wrapper container
-        const imgElements = document.querySelectorAll('.profile-pic img');
+        const profileElement = document.querySelectorAll('.profile-card img');
+        const imgElements = document.querySelectorAll('.status-card img');
         console.log(imgElements);
         // loop through img elements and set src attribute to corresponding image URL from response data
         imgElements.forEach((img, index) => {
