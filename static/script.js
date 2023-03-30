@@ -146,6 +146,7 @@ async function load_home() {
         for (let i=0; i<textElements.length; i++){
           textElements[i].textContent = followers.username[i];
         }
+        await posts(user.username);
       // window.addEventListener('load', () => {
         // profileElement.src = user.profile_photo_url;
     }
@@ -174,19 +175,28 @@ async function suggestions() {
   }
 }
 
-async function posts() {
+async function posts(name) {
   const urlParams = new URLSearchParams(window.location.search);
   const encodeduser = urlParams.get('user');
   const userid = decodeURIComponent(encodeduser);
   try {
-    const response = await fetch(`http://127.0.0.1:8000/followers/${userid}?suggestion=true`, {
+    const response = await fetch(`http://127.0.0.1:8000/posts/${userid}?rand_post=true`, {
         method:'GET',
     });
-    const suggestion = await response.json()
-    console.log(suggestion);
-    const sugg_text = document.querySelectorAll('.suggestion-card p');
-    sugg_text[0].textContent = suggestion.username;
-    sugg_text[1].textContent = suggestion.bio;
+    const post = await response.json()
+    console.log(post);
+    const user_post = document.querySelector('.user p');
+    const user_post2 = document.querySelector('.description span');
+    const user_cap = document.querySelector('.description');
+    const likes = document.querySelector('.likes');
+    const image = document.querySelector('.post-image');
+    user_post.textContent = name;
+    user_post2.textContent = name;
+    user_cap.textContent = post.caption;
+    likes.textContent = `${post.likes}${post.likes * 5} likes`;
+    image.src = post.url;
+//     sugg_text[0].textContent = suggestion.username;
+//     sugg_text[1].textContent = suggestion.bio;
 }
 catch (error) {
 console.log(error) 

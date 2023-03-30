@@ -207,7 +207,7 @@ body {
 .post-image {
   width: 100%;
   height: 500px;
-  object-fit: cover;
+  object-fit: fill;
 }
 
 .post-content {
