@@ -17,7 +17,7 @@ try {
   })
   // console.log(response.json())
   const data = await response.json()
-  console.log(data.user);
+  // console.log(data.user);
 
   if (data.user == true) {
       // Redirect to home.html if key is true
