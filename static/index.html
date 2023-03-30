@@ -139,7 +139,7 @@
               </div>
               <i class="fas fa-ellipsis-h options"></i>
             </div>
-            <img src="../images/1.jpg" class="post-image" />
+            <img src="../images/1.jpg" class="post-image"/>
             <div class="post-content">
               <div class="reaction-wrapper">
                 <i class="icon fas fa-heart"></i>
@@ -166,7 +166,7 @@
         <div class="right-col">
           <!--Profile-Card-->
 
-          <div class="profile-card">
+          <div class="profile-card" id="user-card">
             <div class="profile-pic">
               <img src="../images/profile.jpg" alt="../images/profile.jpg" />
             </div>
@@ -174,7 +174,7 @@
               <p class="username">username</p>
               <p class="sub-text">sub-text</p>
             </div>
-            <button class="logout-btn">logout</button>
+            <button class="logout-btn" onclick="logout()">logout</button>
           </div>
 
           <!--Suggestion-Card-->
@@ -199,7 +199,8 @@
     <script src="script.js">
     </script>
     <script>
-      load_stories()
+      load_home()
+      
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
   </body>
