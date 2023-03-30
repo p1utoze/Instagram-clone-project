@@ -6,18 +6,18 @@ async function getLogin_redirect() {
 event.preventDefault(); // Prevent the form from submitting normally
 
 // Get the username and password values
-const email = document.getElementById('login_mail').value;
+const name = document.getElementById('login_mail').value;
 const password = document.getElementById('password').value;
 
 // Make the GET request to the API endpoint
 if (verifyForm() == true) {
 try {
-  const response = await fetch(`http://127.0.0.1:8000/users?email=${email}`, {
+  const response = await fetch(`http://127.0.0.1:8000/user?=${name}`, {
       method:'GET', 
   })
   // console.log(response.json())
   const data = await response.json()
-  // console.log(data.user);
+  console.log(data);
 
   if (data.user == true) {
       // Redirect to home.html if key is true
