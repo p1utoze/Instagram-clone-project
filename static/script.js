@@ -12,7 +12,7 @@ const password = document.getElementById('password').value;
 // Make the GET request to the API endpoint
 if (verifyForm() == true) {
 try {
-  const response = await fetch(`http://127.0.0.1:8000/users?name=${name}&user_bool=1`, {
+  const response = await fetch(`http://127.0.0.1:8000/users/${name}?user_bool=1`, {
       method:'GET', 
   })
   // console.log(response.json())
@@ -123,10 +123,10 @@ async function load_home() {
         });
         const user = await user_data.json()
         console.log(user);
-        const usertext = document.querySelector('#user-card .username');
-        usertext.textContent = user.username;
-        const userbio = document.querySelector('#user-card .sub-text');
-        userbio.textContent = user.bio;
+        const userinfo = document.querySelectorAll('#user-card p');
+        userinfo[0].textContent = user.username;
+        // const userbio = document.querySelector('#user-card .sub-text');
+        userinfo[1].textContent = user.bio;
         await suggestions();
       // console.log(response.json())
       const followers = await response.json()
@@ -164,12 +164,33 @@ async function suggestions() {
             method:'GET',
         });
         const suggestion = await response.json()
-        console.log("Suggestions")
         console.log(suggestion);
+        const sugg_text = document.querySelectorAll('.suggestion-card p');
+        sugg_text[0].textContent = suggestion.username;
+        sugg_text[1].textContent = suggestion.bio;
   }
   catch (error) {
     console.log(error) 
   }
+}
+
+async function posts() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const encodeduser = urlParams.get('user');
+  const userid = decodeURIComponent(encodeduser);
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/followers/${userid}?suggestion=true`, {
+        method:'GET',
+    });
+    const suggestion = await response.json()
+    console.log(suggestion);
+    const sugg_text = document.querySelectorAll('.suggestion-card p');
+    sugg_text[0].textContent = suggestion.username;
+    sugg_text[1].textContent = suggestion.bio;
+}
+catch (error) {
+console.log(error) 
+}
 }
 
 function logout()

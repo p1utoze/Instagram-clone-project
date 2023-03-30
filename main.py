@@ -14,21 +14,27 @@ app.add_middleware(
 
 
 
-@app.get("/posts/{post_id}")
-async def get_postid(post_id: int, q: Union[str, None]=None):
+@app.get("/posts/{user_id}")
+async def get_postid(user_id: int, rand_post: bool = False):
     db = await get_connected()
-    query = f'''select photo_id, video_id, user_id, caption, location from post where post_id={post_id}'''
+    if rand_post:
+        db.execute(f'''select  post.photo_id, photo_url, caption, count(post_likes.post_id) from photos, post, post_likes
+    where post.photo_id= photos.photo_id and post.user_id = '{user_id}' 
+    and post.post_id = post_likes.post_id group by post.photo_id order by RAND() LIMIT 1;''')
+        return dict(zip(("photo_id", "url", "caption", "likes"), db.fetchone()))
+
+    query = f'''select photo_id, video_id, user_id, caption, location from post where post_id={user_id}'''
     db.execute(query)
     res = db.fetchone()
     db.close()
     return dict(zip(('photo_id', 'video_id', 'user_id', 'caption', 'location'), res))
 
 
-@app.get("/users")
-async def valid_user(user_bool: int = 0, name: str = "XYZ"):
+@app.get("/users/{name}")
+async def valid_user(name: str, user_bool: int = 0):
     db = await get_connected()
     # return {'email': email}
-    if user_bool and name:
+    if user_bool:
         db.execute(f'''SELECT user_id, username,
                     IF(EXISTS(SELECT 1 FROM users WHERE username='{name.lower()}'), 'true', 'false') as user_exists
                     FROM users
@@ -36,23 +42,22 @@ async def valid_user(user_bool: int = 0, name: str = "XYZ"):
         user_exits = db.fetchone()
         db.close()
         return dict(zip(("user_id", "username", "exists" ), user_exits))
-    elif isinstance(name, str):
-        try:
-            db.execute(f'''select DISTINCT user_id, email, username, bio, profile_photo_url 
-                            from  users where username='{name.lower()}' group by email;''')
-            user_profile = db.fetchone()
-            res = dict(zip(("user_id", "email", "username", "bio", "profile_photo_url" ), user_profile))
-            res['user'] = True
-            db.close()
-            return res
-        except:
-            db.close()
-            return {'user': False}
+    try:
+        db.execute(f'''select DISTINCT user_id, email, username, bio, profile_photo_url 
+                        from  users where username='{name.lower()}' group by email;''')
+        user_profile = db.fetchone()
+        res = dict(zip(("user_id", "email", "username", "bio", "profile_photo_url" ), user_profile))
+        res['user'] = True
+        db.close()
+        return res
+    except:
+        db.close()
+        return {'user': False}
     db.close()
     return "Invalid query!"
 
 @app.get("/followers/{user_id}")
-async def followers_transact(user_id: int, self: int = 0, suggestion: bool = False ):
+async def followers_transact(user_id: int, self: int = 0, suggestion: bool = False):
     db = await get_connected()
     keys = ("user_id", "email", "username", "bio", "profile_photo_url")
     if self:
@@ -83,5 +88,4 @@ async def followers_transact(user_id: int, self: int = 0, suggestion: bool = Fal
         return response
     except:
         return 'Internal server error'
-
 
