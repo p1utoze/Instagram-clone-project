@@ -23,7 +23,7 @@ try {
       // Redirect to home.html if key is true
       // await follower_stories(data.user_id); 
       // console.log(data);
-      const encoded_data = encodeURIComponent(data);
+      const encoded_data = encodeURIComponent(data.user_id);
       window.location.replace(`http://127.0.0.1:5500/static/index.html?user=${encoded_data}`);
       
       // console.log(userid); 
@@ -125,15 +125,28 @@ async function load_stories() {
   const userid = decodeURIComponent(encodeduser);
   console.log(userid);
   try {
-        const response = await fetch(`http://127.0.0.1:8000/followers/${userdata.user_id}`, {
+    
+  
+  }
+catch (error) {
+  console.log(error) 
+}
+  try {
+        const response = await fetch(`http://127.0.0.1:8000/followers/${userid}`, {
             method:'GET',
-        })
+        });
+        const user_data = await fetch(`http://127.0.0.1:8000/followers/${userid}?self=1`, {
+            method:'GET',
+        });
+        const user = await user_data.json()
+        console.log(user);
       // console.log(response.json())
       const followers = await response.json()
         console.log(followers);
       window.addEventListener('load', () => {
         // select all img elements in .status-wrapper container
-        const profileElement = document.querySelectorAll('.profile-card img');
+        const profileElement = document.querySelector('.profile-card img');
+        profileElement.src = user.profile_photo_url;
         const imgElements = document.querySelectorAll('.status-card img');
         console.log(imgElements);
         // loop through img elements and set src attribute to corresponding image URL from response data
