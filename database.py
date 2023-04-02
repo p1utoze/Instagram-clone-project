@@ -37,12 +37,12 @@ def __get_connect():
                      'ssl_ca': 'secrets/skysql_chain_2022.pem',
                      'database': 'social_media'
                      }
-    conn = mariadb.connect(**skysql_params)
+    conn = mariadb.connect(**connect_params)
     return conn
 
 #
-# conn = __get_connect()
-# print(conn.database)
+conn = __get_connect()
+print(conn.database)
 
 
 # db = conn.cursor()
